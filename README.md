@@ -44,7 +44,7 @@ For development, I used these tools:
 
 ## Architecture
 
-The application follows a standard service architecture that is (on the way to being) setup to be highly-available and scalable. At the core is a FastAPI server that handles the API requests from Slack and orchestrates the agent. We use PostgreSQL as the main persistent store and Redis as a cache. The agent state is checkpointed and stored in PostgreSQL (across restarts or workers). We use nginx as a load balancer, and uvicorn as a production-ready server configured with two workers. For deployment, the services are containerised and run in Docker Compose.
+The application follows a standard service architecture that is (on the way to being) setup to be highly-available and scalable. At the core is a FastAPI server that handles the API requests from Slack and orchestrates the agent. We use PostgreSQL as the main persistent store and Redis as a cache. The agent state is checkpointed and stored in PostgreSQL (across restarts or workers). I used nginx as a load balancer and uvicorn as a production-ready server configured with two workers. For deployment, the services are containerised and run in Docker Compose.
 
 - **Load Balancer**: Nginx to distribute traffic and improve reliability (although only a single API instance is running in the compose file).
 - **FastAPI Server**: API server running with two replicas of uvicorn workers for handling API requests. Written using asynchronous code forhigh performance and throughput.
