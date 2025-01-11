@@ -1,0 +1,17 @@
+.env
+.mypy_cache
+.pytest_cache
+.ruff_cache
+*.log
+*.db
+*.db-shm
+*.db-wal
+*.db-journal
+*.db-shm
+*.db-wal
+*.db-journal
+logs/
+.git
+*.md
+.cache
+.DS_Store

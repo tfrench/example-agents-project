@@ -1,0 +1,42 @@
+services:
+  backend:
+    build: .
+    container_name: aipolabs-test-backend
+    ports:
+      - "8080" # Expose backend API on port 8080
+    env_file:
+      - .env.docker
+    depends_on:
+      - postgres
+      - redis
+
+  load_balancer:
+    image: nginx:alpine
+    container_name: aipolabs-test-load-balancer
+    ports:
+      - "8000:8000" # Load balancer listening on port 8000
+    depends_on:
+      - backend
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+
+  postgres:
+    image: postgres:14
+    container_name: aipolabs-test-postgres-db
+    environment:
+      POSTGRES_DB: test_db
+      POSTGRES_USER: test-username
+      POSTGRES_PASSWORD: test-password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: aipolabs-test-redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:
