@@ -73,7 +73,7 @@ The API handles events from Slack and Google OAuth2 authenticationcallbacks.
 ## Setup Instructions
 
 1. **Setup Google Web App**:
-   - Configure Application with Gmail scopes and specify the redirect URL.
+   - Configure Google Web Application with Gmail scopes and specify the redirect URL.
    - Scopes: `https://www.googleapis.com/auth/gmail.readonly`, `https://www.googleapis.com/auth/gmail.send`, `https://www.googleapis.com/auth/gmail.compose`
    - Redirect URL: `http://localhost:8000/auth/callback` (or ngrok url)
 
