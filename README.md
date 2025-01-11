@@ -105,7 +105,7 @@ The API handles events from Slack and Google OAuth2 authenticationcallbacks.
    - Update env variable `ENCRYPTION_KEY` in `.env` and `.env.docker`.
 
 5. **Using Python 3.11**
-    - Install dependencies: `make setup`
+    - Set Python version and install dependencies: `make setup`
 
 ---
 
@@ -119,7 +119,7 @@ A sample of tests are provided in `tests/test_api.py` - they are not extensive a
 
 ![tests](./static/tests.png)
 
-In general, there's much to improve with testing, in terms of coverage and quality, for unit, integration, and e2e tests.
+In general, there's much to improve with testing, including more unit, integration and e2e tests. There are many moving pieces here that need thorough testing and evaluation.
 
 ### Running the Application
 
@@ -127,7 +127,7 @@ In general, there's much to improve with testing, in terms of coverage and quali
     - This will start the PostgreSQL and Redis services using Docker Compose.
 
 2. **Run Locally**: `make local_run`
-    - Use the local Python environment to start the FastAPI server.
+    - Use the local Python environment to start the FastAPI server - good for quick development loops.
 
 ## Production setup
 
@@ -170,7 +170,7 @@ Provides a Slack App interface to the agent.
 
 ### Persistence
 - PostgreSQL is used to store user Google auth tokens securely using symmetric encryption.
-- Agent memory sessions are checkpointed and stored in PostgreSQL (to persist across restarts and workers; including a simple Redis lock to handle concurrent requests).
+- Agent memory sessions are checkpointed and stored in PostgreSQL to persist across restarts and workers. This includes using a simple distributed (Redis-based) lock to handle concurrent requests across workers (needs more testing!).
 
 ### Cache
 - Utilizes Redis for caching tokens and event IDs to enhance API performance, reducing load on backend and database.
@@ -185,17 +185,19 @@ Provides a Slack App interface to the agent.
 There lots of potential improvements; here are some important ones to consider:
 
 1. **Features**:
-    - Agent session handling: handle exclusive (lock) access to sessions (threads).
-    - Improved agent UX, e.g. handling streaming responses
+    - Improved agent UX, e.g. streaming responses; status updates; memory usage; context
     - Introduce Temporal for durable workflow orchestration.
+    - Rate limiting/throttling to handle varying loads to the service
     - Queueing for handling concurrent requests & external service constraints
-    - Rate limiting/ throttling to handle varying loads to the service
     - Add monitoring and observability to the infrastructure
     - Scale databases as required
     - Run databases in high-availability mode as required
 
-2. **Clean up**
-    - Refactor: e.g. API structure, logging, tests, etc.
+2. **Refactor**
+    - API structure
+    - Logging
+    - Tests: unit; integration; e2e
+    - Other improvements, including code quality
 
 2. **Dev improvements**
     - `alembic` for database migrations
@@ -204,4 +206,4 @@ There lots of potential improvements; here are some important ones to consider:
     - `devcontainers` for development environment
 ---
 
-Thank you for reviewing my submission!
+Thank you for reviewing my submission. It's been fun.
