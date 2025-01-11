@@ -7,6 +7,7 @@ from fastapi import HTTPException
 from google.oauth2.credentials import Credentials
 
 from .db import (
+    NoCredentialsFound,
     store_user_token,
     get_user_token,
     delete_user_token,
@@ -36,7 +37,10 @@ async def has_user_credentials(user_id: str) -> bool:
 
 async def get_user_credentials(user_id: str) -> Credentials:
     """Retrieves the stored credentials for a given user."""
-    creds = await get_user_token(user_id)
+    try:
+        creds = await get_user_token(user_id)
+    except NoCredentialsFound:
+        return None
 
     # check if needs a refresh (check expired); refresh; store
     if creds["expires_at"] < datetime.now():

@@ -66,13 +66,7 @@ async def remove_user_token(user_id: str):
 
 
 async def acquire_lock(user_id: str, timeout_secs: int = 10) -> bool:
-    """
-    Attempt to acquire the lock for a specific user_id within a timeout period.
-
-    Args:
-    user_id: The ID for which the lock is required.
-    timeout: Maximum time (ms) to keep trying to acquire the lock.
-    """
+    """Attempt to acquire the lock for a specific user_id within a timeout period."""
     client = get_client()
     end_time = time.time() + timeout_secs
     while time.time() < end_time:
