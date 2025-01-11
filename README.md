@@ -193,7 +193,7 @@ There lots of potential improvements; here are some important ones to consider:
     - Scale databases as required
     - Run databases in high-availability mode as required
 
-2. **Refactor**
+2. **Improve/Refactor**
     - API structure
     - Logging
     - Tests: unit; integration; e2e
