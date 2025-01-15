@@ -30,7 +30,7 @@ The core stack is:
 - **Redis**: Key-value datastore for caching event IDs and tokens.
 - **LangGraph**: Framework for building the agent.
 - **Slack API**: For integrating Slack App events as the external interface.
-- **Google OAuth2**: Google authentication to access GmailAPIs.
+- **Google OAuth2**: Google authentication to access Gmail APIs.
 
 For development, I used these tools:
 
@@ -47,7 +47,7 @@ For development, I used these tools:
 The application follows a standard service architecture that is (on the way to being) setup to be highly-available and scalable. At the core is a FastAPI server that handles the API requests from Slack and orchestrates the agent. We use PostgreSQL as the main persistent store and Redis as a cache. The agent state is checkpointed and stored in PostgreSQL (across restarts or workers). I used nginx as a load balancer and uvicorn as a production-ready server configured with two workers. For deployment, the services are containerised and run in Docker Compose.
 
 - **Load Balancer**: Nginx to distribute traffic and improve reliability (although only a single API instance is running in the compose file).
-- **FastAPI Server**: API server running with two replicas of uvicorn workers for handling API requests. Written using asynchronous code forhigh performance and throughput.
+- **FastAPI Server**: API server running with two replicas of uvicorn workers for handling API requests. Written using asynchronous code for high performance and throughput.
 - **PostgreSQL Database**: Stores persistent data related to users tokens and agent sessions.
 - **Redis Cache**: Caches event IDs and tokens to improve performance and reduce load on backend and database.
 - **Slack App**: Configured to receive Slack events and send messages.
@@ -57,7 +57,7 @@ The application follows a standard service architecture that is (on the way to b
 
 ## APIs
 
-The API handles events from Slack and Google OAuth2 authenticationcallbacks.
+The API handles events from Slack and Google OAuth2 authentication callbacks.
 
 - **Slack Events (POST /slack/events)**: Handles incoming events from Slack. There are the following messages:
     - `hello`: provides a welcome message and instructions.
@@ -188,7 +188,7 @@ There lots of potential improvements; here are some important ones to consider:
     - Improved agent UX, e.g. streaming responses; status updates; memory usage; context
     - Introduce Temporal for durable workflow orchestration.
     - Rate limiting/throttling to handle varying loads to the service
-    - Queueing for handling concurrent requests & external service constraints
+    - Retries/backoffs and/or queueing for handling concurrent requests & external service constraints
     - Add monitoring and observability to the infrastructure
     - Scale databases as required
     - Run databases in high-availability mode as required
