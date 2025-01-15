@@ -3,7 +3,7 @@ services:
     build: .
     container_name: aipolabs-test-backend
     ports:
-      - "8080" # Expose backend API on port 8080
+      - "8080"
     env_file:
       - .env.docker
     depends_on:
@@ -14,7 +14,7 @@ services:
     image: nginx:alpine
     container_name: aipolabs-test-load-balancer
     ports:
-      - "8000:8000" # Load balancer listening on port 8000
+      - "8000:8000"
     depends_on:
       - backend
     volumes:
