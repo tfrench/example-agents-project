@@ -23,6 +23,8 @@ DB_USER = os.getenv("DB_USER")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 DB_URI = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
 
+MODEL = "gpt-4o"
+
 
 workflows: dict[str, StateGraph] = {}
 
@@ -68,7 +70,7 @@ async def get_workflow(user_id: str):
     tools = await get_tools(user_id)
     tool_node = ToolNode(tools)
 
-    model = ChatOpenAI(model="gpt-4o", temperature=0).bind_tools(tools)
+    model = ChatOpenAI(model=MODEL, temperature=0).bind_tools(tools)
 
     async def call_model(state: MessagesState):
         messages = state["messages"]

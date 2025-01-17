@@ -1,20 +1,19 @@
-# AIpolabs Test
+# Example Agents Project
 
-![My Agent](./static/aipolabs_icon.png)
+![My Agent](./static/icon.png)
 
 
 ## Overview
 
-Welcome to Thomas' AIpolabs engineering test!
+Welcome to my example AI Agents project. This was put together in a 48hr time window - with a few improvements post-hoc (including more tests).
 
 This document explains the choice of tech stack, architecture, APIs, setup instructions, and provides an overview of the application's features.
 
-For the exercise, I developed a service that provides a Slack App interface to a LangGraph-based agent that, once authenticated, can read, draft and send Gmail emails.
+For this example, I developed a service that provides a Slack App interface to a LangGraph-based agent that, once authenticated, can read, draft and send Gmail emails.
 
 I added several features to bring it closer to a production service for reliability, security, and performance. More details below.
 
-This was developed with the kind assistance of ChatGPT and Cursor.
-
+The was developed with assistance from ChatGPT and Cursor.
 ---
 
 ## Tech Stack
@@ -89,7 +88,6 @@ The API handles events from Slack and Google OAuth2 authentication callbacks.
    - `DB_NAME`: Postgres name.
    - `DB_USER`: Postgres user.
    - `DB_PASSWORD`: Postgres password.
-   - `ENCRYPTION_KEY`: Database encryption key.
    - `REDIS_HOST`: Redis host.
    - `REDIS_PORT`: Redis port.
 
@@ -99,10 +97,6 @@ The API handles events from Slack and Google OAuth2 authentication callbacks.
    - Update Google application redirect URL with the Ngrok callback URL. For example: `https://<ngrok-id>.ngrok.app/auth/callback`
    - Update `GOOGLE_REDIRECT_URI` in `.env` and `.env.docker` with the Ngrok callback URL.
    - Update Slack bot events URL with the Ngrok callback URL.
-
-4. **Generate an Encryption Key**:
-   - Generate a secure encryption key for token encryption.
-   - Update env variable `ENCRYPTION_KEY` in `.env` and `.env.docker`.
 
 5. **Using Python 3.11**
     - Set Python version and install dependencies: `make setup`

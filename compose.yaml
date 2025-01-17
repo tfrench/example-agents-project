@@ -1,7 +1,7 @@
 services:
   backend:
     build: .
-    container_name: aipolabs-test-backend
+    container_name: example-agents-project-backend
     ports:
       - "8080"
     env_file:
@@ -12,7 +12,7 @@ services:
 
   load_balancer:
     image: nginx:alpine
-    container_name: aipolabs-test-load-balancer
+    container_name: example-agents-project-load-balancer
     ports:
       - "8000:8000"
     depends_on:
@@ -22,7 +22,7 @@ services:
 
   postgres:
     image: postgres:14
-    container_name: aipolabs-test-postgres-db
+    container_name: example-agents-project-postgres-db
     environment:
       POSTGRES_DB: test_db
       POSTGRES_USER: test-username
@@ -34,7 +34,7 @@ services:
 
   redis:
     image: redis:7
-    container_name: aipolabs-test-redis
+    container_name: example-agents-project-test-redis
     ports:
       - "6379:6379"
 

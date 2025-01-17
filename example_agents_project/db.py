@@ -1,6 +1,5 @@
 import os
 from datetime import datetime, timedelta
-from cryptography.fernet import Fernet
 from dotenv import load_dotenv
 from sqlalchemy import Column, String, Text, text, TIMESTAMP
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
@@ -15,15 +14,14 @@ DB_HOST = os.getenv("DB_HOST")
 DB_NAME = os.getenv("DB_NAME")
 DB_USER = os.getenv("DB_USER")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
-ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY")
 
-if not all([DB_HOST, DB_NAME, DB_USER, DB_PASSWORD, ENCRYPTION_KEY]):
+if not all([DB_HOST, DB_NAME, DB_USER, DB_PASSWORD]):
     raise ValueError("One or more required environment variables are missing.")
-
-fernet = Fernet(ENCRYPTION_KEY)
 
 DATABASE_URL = f"postgresql+asyncpg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}"
 _logger.info(f"Database URL: {DATABASE_URL}")
+
+QUERY_DBS = "SELECT 1 FROM pg_database WHERE datname = :dbname"
 
 async_engine = create_async_engine(DATABASE_URL, echo=False)
 AsyncSessionLocal = sessionmaker(
@@ -59,7 +57,7 @@ async def create_database_if_not_exists():
     async with async_engine_without_dbname.connect() as conn:
         await conn.execution_options(isolation_level="AUTOCOMMIT")
         result = await conn.execute(
-            text("SELECT 1 FROM pg_database WHERE datname = :dbname"),
+            text(QUERY_DBS),
             {"dbname": DB_NAME},
         )
         if not result.fetchone():
@@ -79,14 +77,11 @@ async def store_user_token(user_id: str, data: dict):
     _logger.info(f"Storing user token for user {user_id}: {data}")
     expires_at = datetime.now() + timedelta(seconds=data["expires_in"])
 
-    encrypted_access_token = fernet.encrypt(data["access_token"].encode()).decode()
-    encrypted_refresh_token = fernet.encrypt(data["refresh_token"].encode()).decode()
-
     async with AsyncSessionLocal() as session:
         token = UserToken(
             user_id=user_id,
-            access_token=encrypted_access_token,
-            refresh_token=encrypted_refresh_token,
+            access_token=data["access_token"],
+            refresh_token=data["refresh_token"],
             expires_at=expires_at,
             scopes=data["scope"],
         )
@@ -99,11 +94,9 @@ async def update_user_token(user_id: str, data: dict):
     _logger.info(f"Storing user token for user {user_id}: {data}")
     expires_at = datetime.now() + timedelta(seconds=data["expires_in"])
 
-    encrypted_access_token = fernet.encrypt(data["access_token"].encode()).decode()
-
     async with AsyncSessionLocal() as session:
         token = await session.get(UserToken, user_id)
-        token.access_token = encrypted_access_token  # no refresh token
+        token.access_token = data["access_token"]  # no refresh token
         token.expires_at = expires_at
         token.scopes = data["scope"]
         await session.commit()
@@ -122,12 +115,9 @@ async def get_user_token(user_id: str) -> dict:
         if not token:
             raise NoCredentialsFound("Tokens not found")
 
-        access_token = fernet.decrypt(token.access_token.encode()).decode()
-        refresh_token = fernet.decrypt(token.refresh_token.encode()).decode()
-
         return dict(
-            access_token=access_token,
-            refresh_token=refresh_token,
+            access_token=token.access_token,
+            refresh_token=token.refresh_token,
             expires_at=token.expires_at,
             scopes=token.scopes.split(","),
         )

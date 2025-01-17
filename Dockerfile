@@ -2,7 +2,6 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install system dependencies including PostgreSQL development libraries
 RUN apt-get update && apt-get install -y \
     build-essential \
     curl \
@@ -21,4 +20,4 @@ COPY . .
 
 EXPOSE 8080
 
-CMD ["poetry", "run", "uvicorn", "aipolabs_test.api:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "2"]
+CMD ["poetry", "run", "uvicorn", "example_agents_project.api:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "2"]

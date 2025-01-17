@@ -2,7 +2,7 @@ import pytest
 import pytest_asyncio
 from httpx import AsyncClient, ASGITransport
 from unittest.mock import AsyncMock, patch
-from aipolabs_test.api import app
+from example_agents_project.api import app
 from fastapi import status
 
 
@@ -23,10 +23,10 @@ async def test_health_check(test_client):
 
 
 @pytest.mark.asyncio
-@patch("aipolabs_test.api.cache.exists_event_id", return_value=False)
-@patch("aipolabs_test.api.cache.add_event_id", new_callable=AsyncMock)
-@patch("aipolabs_test.api.send_slack_message", new_callable=AsyncMock)
-@patch("aipolabs_test.api.BackgroundTasks")
+@patch("example_agents_project.api.cache.exists_event_id", return_value=False)
+@patch("example_agents_project.api.cache.add_event_id", new_callable=AsyncMock)
+@patch("example_agents_project.api.send_slack_message", new_callable=AsyncMock)
+@patch("example_agents_project.api.BackgroundTasks")
 async def test_slack_events_hello(
     mock_background_tasks,
     mock_send_slack_message,
@@ -71,13 +71,13 @@ async def test_slack_events_hello(
 
 
 @pytest.mark.asyncio
-@patch("aipolabs_test.api.cache.exists_event_id", return_value=False)
-@patch("aipolabs_test.api.cache.add_event_id", new_callable=AsyncMock)
-@patch("aipolabs_test.api.cache.exists_user_token", return_value=False)
-@patch("aipolabs_test.api.has_user_credentials", return_value=False)
-@patch("aipolabs_test.api.get_auth_url", return_value="http://auth.url")
-@patch("aipolabs_test.api.send_slack_message", new_callable=AsyncMock)
-@patch("aipolabs_test.api.BackgroundTasks")
+@patch("example_agents_project.api.cache.exists_event_id", return_value=False)
+@patch("example_agents_project.api.cache.add_event_id", new_callable=AsyncMock)
+@patch("example_agents_project.api.cache.exists_user_token", return_value=False)
+@patch("example_agents_project.api.has_user_credentials", return_value=False)
+@patch("example_agents_project.api.get_auth_url", return_value="http://auth.url")
+@patch("example_agents_project.api.send_slack_message", new_callable=AsyncMock)
+@patch("example_agents_project.api.BackgroundTasks")
 async def test_slack_events_auth(
     mock_background_tasks,
     mock_send_message,
@@ -125,12 +125,12 @@ async def test_slack_events_auth(
 
 
 @pytest.mark.asyncio
-@patch("aipolabs_test.api.cache.exists_event_id", return_value=False)
-@patch("aipolabs_test.api.cache.add_event_id", new_callable=AsyncMock)
-@patch("aipolabs_test.api.cache.exists_user_token", return_value=False)
-@patch("aipolabs_test.api.has_user_credentials", return_value=False)
-@patch("aipolabs_test.api.send_slack_message", new_callable=AsyncMock)
-@patch("aipolabs_test.api.BackgroundTasks")
+@patch("example_agents_project.api.cache.exists_event_id", return_value=False)
+@patch("example_agents_project.api.cache.add_event_id", new_callable=AsyncMock)
+@patch("example_agents_project.api.cache.exists_user_token", return_value=False)
+@patch("example_agents_project.api.has_user_credentials", return_value=False)
+@patch("example_agents_project.api.send_slack_message", new_callable=AsyncMock)
+@patch("example_agents_project.api.BackgroundTasks")
 async def test_slack_events_status(
     mock_background_tasks,
     mock_send_message,
@@ -174,13 +174,13 @@ async def test_slack_events_status(
 
 
 @pytest.mark.asyncio
-@patch("aipolabs_test.api.cache.exists_event_id", return_value=False)
-@patch("aipolabs_test.api.cache.add_event_id", new_callable=AsyncMock)
-@patch("aipolabs_test.api.has_user_credentials", return_value=True)
-@patch("aipolabs_test.api.revoke_credentials", new_callable=AsyncMock)
-@patch("aipolabs_test.api.cache.remove_user_token", new_callable=AsyncMock)
-@patch("aipolabs_test.api.send_slack_message", new_callable=AsyncMock)
-@patch("aipolabs_test.api.BackgroundTasks")
+@patch("example_agents_project.api.cache.exists_event_id", return_value=False)
+@patch("example_agents_project.api.cache.add_event_id", new_callable=AsyncMock)
+@patch("example_agents_project.api.has_user_credentials", return_value=True)
+@patch("example_agents_project.api.revoke_credentials", new_callable=AsyncMock)
+@patch("example_agents_project.api.cache.remove_user_token", new_callable=AsyncMock)
+@patch("example_agents_project.api.send_slack_message", new_callable=AsyncMock)
+@patch("example_agents_project.api.BackgroundTasks")
 async def test_slack_events_revoke_with_credentials(
     mock_background_tasks,
     mock_send_message,
@@ -226,11 +226,11 @@ async def test_slack_events_revoke_with_credentials(
 
 
 @pytest.mark.asyncio
-@patch("aipolabs_test.api.cache.exists_event_id", return_value=False)
-@patch("aipolabs_test.api.cache.add_event_id", new_callable=AsyncMock)
-@patch("aipolabs_test.api.has_user_credentials", return_value=False)
-@patch("aipolabs_test.api.send_slack_message", new_callable=AsyncMock)
-@patch("aipolabs_test.api.BackgroundTasks")
+@patch("example_agents_project.api.cache.exists_event_id", return_value=False)
+@patch("example_agents_project.api.cache.add_event_id", new_callable=AsyncMock)
+@patch("example_agents_project.api.has_user_credentials", return_value=False)
+@patch("example_agents_project.api.send_slack_message", new_callable=AsyncMock)
+@patch("example_agents_project.api.BackgroundTasks")
 async def test_slack_events_revoke_without_credentials(
     mock_background_tasks,
     mock_send_message,
@@ -272,12 +272,12 @@ async def test_slack_events_revoke_without_credentials(
 
 
 @pytest.mark.asyncio
-@patch("aipolabs_test.api.cache.exists_event_id", return_value=False)
-@patch("aipolabs_test.api.cache.add_event_id", new_callable=AsyncMock)
-@patch("aipolabs_test.api.get_user_credentials", return_value=True)
-@patch("aipolabs_test.api.process_message", new_callable=AsyncMock)
-@patch("aipolabs_test.api.send_slack_message", new_callable=AsyncMock)
-@patch("aipolabs_test.api.BackgroundTasks")
+@patch("example_agents_project.api.cache.exists_event_id", return_value=False)
+@patch("example_agents_project.api.cache.add_event_id", new_callable=AsyncMock)
+@patch("example_agents_project.api.get_user_credentials", return_value=True)
+@patch("example_agents_project.api.process_message", new_callable=AsyncMock)
+@patch("example_agents_project.api.send_slack_message", new_callable=AsyncMock)
+@patch("example_agents_project.api.BackgroundTasks")
 async def test_slack_events_chat_with_message(
     mock_background_tasks,
     mock_send_message,
@@ -320,11 +320,11 @@ async def test_slack_events_chat_with_message(
 
 
 @pytest.mark.asyncio
-@patch("aipolabs_test.api.cache.exists_event_id", return_value=False)
-@patch("aipolabs_test.api.cache.add_event_id", new_callable=AsyncMock)
-@patch("aipolabs_test.api.get_user_credentials", return_value=False)
-@patch("aipolabs_test.api.send_slack_message", new_callable=AsyncMock)
-@patch("aipolabs_test.api.BackgroundTasks")
+@patch("example_agents_project.api.cache.exists_event_id", return_value=False)
+@patch("example_agents_project.api.cache.add_event_id", new_callable=AsyncMock)
+@patch("example_agents_project.api.get_user_credentials", return_value=False)
+@patch("example_agents_project.api.send_slack_message", new_callable=AsyncMock)
+@patch("example_agents_project.api.BackgroundTasks")
 async def test_slack_events_chat_without_credentials(
     mock_background_tasks,
     mock_send_message,
@@ -366,11 +366,11 @@ async def test_slack_events_chat_without_credentials(
 
 
 @pytest.mark.asyncio
-@patch("aipolabs_test.api.cache.exists_event_id", return_value=False)
-@patch("aipolabs_test.api.cache.add_event_id", new_callable=AsyncMock)
-@patch("aipolabs_test.api.get_user_credentials", return_value=True)
-@patch("aipolabs_test.api.send_slack_message", new_callable=AsyncMock)
-@patch("aipolabs_test.api.BackgroundTasks")
+@patch("example_agents_project.api.cache.exists_event_id", return_value=False)
+@patch("example_agents_project.api.cache.add_event_id", new_callable=AsyncMock)
+@patch("example_agents_project.api.get_user_credentials", return_value=True)
+@patch("example_agents_project.api.send_slack_message", new_callable=AsyncMock)
+@patch("example_agents_project.api.BackgroundTasks")
 async def test_slack_events_chat_without_message(
     mock_background_tasks,
     mock_send_message,
@@ -412,8 +412,8 @@ async def test_slack_events_chat_without_message(
 
 
 @pytest.mark.asyncio
-@patch("aipolabs_test.api.cache.exists_event_id", return_value=True)
-@patch("aipolabs_test.api.cache.add_event_id", new_callable=AsyncMock)
+@patch("example_agents_project.api.cache.exists_event_id", return_value=True)
+@patch("example_agents_project.api.cache.add_event_id", new_callable=AsyncMock)
 async def test_slack_events_duplicate_event(
     mock_add_event_id, mock_exists_event_id, test_client
 ):

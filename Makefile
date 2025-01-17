@@ -5,11 +5,11 @@ setup:
 launch_ngrok:
 	ngrok http http://localhost:8000
 
-local_run:
-	poetry run uvicorn aipolabs_test.api:app --reload --port 8000  # no load_balancer
+run_local:
+	poetry run uvicorn example_agents_project.api:app --reload --port 8000  # no load_balancer
 
 run_tests:
-	poetry run pytest --cov=aipolabs_test/ tests/test_api.py
+	poetry run pytest -v --cov=example_agents_project/ tests/test_api.py
 
 run_ruff:
 	poetry run ruff check . --fix
