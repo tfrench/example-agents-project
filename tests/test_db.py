@@ -13,7 +13,7 @@ from example_agents_project.db import (
     QUERY_DBS,
 )
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.sql import text  # Import text for SQL statements
+from sqlalchemy.sql import text
 
 
 @pytest.mark.asyncio
@@ -24,19 +24,20 @@ async def test_create_database_if_not_exists(
 ):
     """Test database creation if it does not exist."""
     mock_conn = AsyncMock()
+    mock_result = AsyncMock()
+    mock_result.fetchone.return_value = None  # Simulate database not existing
+
+    mock_conn.execute = AsyncMock(return_value=mock_result)
     mock_create_async_engine.return_value.connect.return_value.__aenter__.return_value = (
         mock_conn
-    )
-    mock_conn.execute.return_value.fetchone.return_value = (
-        None  # Simulate database not existing
     )
 
     await create_database_if_not_exists()
 
-    mock_conn.execute.assert_called_once()
-    called_query, called_params = mock_conn.execute.call_args[0]
-    assert str(called_query) == QUERY_DBS
-    assert called_params == {"dbname": DB_NAME}
+    execute_call = mock_conn.execute.call_args[0]
+    assert str(execute_call[0]) == QUERY_DBS
+    assert execute_call[1] == {"dbname": DB_NAME}
+    mock_result.fetchone.assert_called_once()
 
 
 @pytest.mark.asyncio
@@ -44,9 +45,8 @@ async def test_create_database_if_not_exists(
 @patch("example_agents_project.db.AsyncSessionLocal")
 async def test_init_db(mock_async_session_local, mock_create_database_if_not_exists):
     """Test database initialization."""
-    async with AsyncSession() as session:
-        await init_db()
-        mock_create_database_if_not_exists.assert_called_once()
+    await init_db()
+    mock_create_database_if_not_exists.assert_called_once()
 
 
 @pytest.mark.asyncio
@@ -54,6 +54,8 @@ async def test_init_db(mock_async_session_local, mock_create_database_if_not_exi
 async def test_store_user_token(mock_async_session_local):
     """Test storing a user token."""
     mock_session = AsyncMock()
+    mock_session.add = AsyncMock()
+    mock_session.commit = AsyncMock()
     mock_async_session_local.return_value.__aenter__.return_value = mock_session
 
     user_id = "user123"
@@ -66,10 +68,13 @@ async def test_store_user_token(mock_async_session_local):
 
     await store_user_token(user_id, data)
 
-    mock_session.add.assert_called_once()
+    # Get the UserToken object that was passed to add
     token = mock_session.add.call_args[0][0]
+    assert isinstance(token, UserToken)
     assert token.user_id == user_id
     assert token.access_token == data["access_token"]
+    mock_session.add.assert_called_once()
+    mock_session.commit.assert_called_once()
 
 
 @pytest.mark.asyncio
@@ -77,6 +82,8 @@ async def test_store_user_token(mock_async_session_local):
 async def test_update_user_token(mock_async_session_local):
     """Test updating a user token."""
     mock_session = AsyncMock()
+    mock_session.get = AsyncMock()
+    mock_session.commit = AsyncMock()
     mock_async_session_local.return_value.__aenter__.return_value = mock_session
 
     user_id = "user123"
@@ -86,19 +93,21 @@ async def test_update_user_token(mock_async_session_local):
         "scope": "new_scope",
     }
 
-    mock_session.get.return_value = UserToken(
+    mock_token = UserToken(
         user_id=user_id,
         access_token="old_token",
         refresh_token="old_refresh",
         expires_at=None,
         scopes="old_scope",
     )
+    mock_session.get.return_value = mock_token
 
     await update_user_token(user_id, data)
 
-    token = mock_session.get.return_value
-    assert token.access_token == data["access_token"]
-    assert token.scopes == data["scope"]
+    mock_session.get.assert_called_once()
+    mock_session.commit.assert_called_once()
+    assert mock_token.access_token == data["access_token"]
+    assert mock_token.scopes == data["scope"]
 
 
 @pytest.mark.asyncio
@@ -106,19 +115,22 @@ async def test_update_user_token(mock_async_session_local):
 async def test_has_user_token(mock_async_session_local):
     """Test checking if a user token exists."""
     mock_session = AsyncMock()
+    mock_session.get = AsyncMock()
     mock_async_session_local.return_value.__aenter__.return_value = mock_session
 
     user_id = "user123"
-    mock_session.get.return_value = UserToken(
+    mock_token = UserToken(
         user_id=user_id,
         access_token="token",
         refresh_token="refresh",
         expires_at=None,
         scopes="scope",
     )
+    mock_session.get.return_value = mock_token
 
     result = await has_user_token(user_id)
 
+    mock_session.get.assert_called_once()
     assert result is True
 
 

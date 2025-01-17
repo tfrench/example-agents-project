@@ -9,7 +9,7 @@ run_local:
 	poetry run uvicorn example_agents_project.api:app --reload --port 8000  # no load_balancer
 
 run_tests:
-	poetry run pytest -v --cov=example_agents_project/ tests/test_api.py
+	poetry run pytest -v --cov=example_agents_project/ tests/
 
 run_ruff:
 	poetry run ruff check . --fix
