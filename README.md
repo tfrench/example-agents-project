@@ -197,6 +197,4 @@ There lots of potential improvements; here are some important ones to consider:
     - Github actions for CI/CD
     - `uv` for dependency management
     - `devcontainers` for development environment
----
 
-Thank you for reviewing my submission. It's been fun.
