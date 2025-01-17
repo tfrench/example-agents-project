@@ -110,9 +110,7 @@ The API handles events from Slack and Google OAuth2 authentication callbacks.
 
 - Run the tests: `make run_tests`
 
-A sample of tests are provided in `tests/test_api.py` - they are not extensive and could be improved (coverage ~50%).
-
-![tests](./static/tests.png)
+A sample of tests are provided in `tests/test_api.py` - they are not extensive and could be improved (coverage ~78%).
 
 In general, there's much to improve with testing, including more unit, integration and e2e tests. There are many moving pieces here that need thorough testing and evaluation.
 
