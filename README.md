@@ -27,7 +27,7 @@ The core stack is:
 - **FastAPI**: For building high performance web APIs.
 - **SQLAlchemy**: ORM for database interactions.
 - **PostgreSQL**: Relational database for persistent data storage.
-- **Redis**: Key-value datastore for caching event IDs and tokens.
+- **Redis**: Key-value datastore for caching event IDs, tokens, and locks.
 - **LangGraph**: Framework for building the agent.
 - **Slack API**: For integrating Slack App events as the external interface.
 - **Google OAuth2**: Google authentication to access Gmail APIs.
