@@ -1,4 +1,4 @@
-# Example Agents Project
+# Example AI Agents Project
 
 ![My Agent](./static/icon.png)
 
