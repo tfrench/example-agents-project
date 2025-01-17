@@ -14,6 +14,7 @@ For this example, I developed a service that provides a Slack App interface to a
 I added several features to bring it closer to a production service for reliability, security, and performance. More details below.
 
 The was developed with assistance from ChatGPT and Cursor.
+
 ---
 
 ## Tech Stack
